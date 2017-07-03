@@ -18,6 +18,7 @@ class ViewController: UIViewController , UITableViewDataSource{
         self.title = "Notes"
         let button:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNote))
         self.navigationItem.rightBarButtonItem = button
+        self.navigationItem.leftBarButtonItem = editButtonItem
     }
     
     func addNote() {
@@ -36,7 +37,18 @@ class ViewController: UIViewController , UITableViewDataSource{
         return tableData.count
     }
     
-
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        table.setEditing(editing, animated: animated)
+    }
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if(editingStyle != UITableViewCellEditingStyle.delete){
+            return
+        }
+        tableData.remove(at: indexPath.row)
+        tableView.deleteRows(at: [indexPath], with: .fade)
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
